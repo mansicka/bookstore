@@ -33,7 +33,7 @@ class DbService {
     //init command for making sure the db structure is ok
 
 
-    async getAlldata() {
+    async getAll() {
         try {
             const response = await new Promise((resolve, reject) => {
                 const query = "SELECT * FROM books;"
@@ -52,7 +52,7 @@ class DbService {
     }
 
 
-    async insertNewBook(book) {
+    async insertNew(book) {
         try {
             const response = await new Promise((resolve, reject) => {
                 const query = "INSERT INTO books (title, author, description) VALUES (?,?,?);"
@@ -69,6 +69,25 @@ class DbService {
             return error;
         }
     }
+
+    async deleteById(id) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "DELETE FROM books WHERE id = ?;"
+                connection.query(query, [id], (err, result) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(result.insertedId);
+                })
+            });
+
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
+
 }
 
 module.exports = DbService;
