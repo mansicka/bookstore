@@ -1,6 +1,5 @@
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
-const { response } = require('express');
 let instance = null;
 dotenv.config();
 
@@ -15,11 +14,17 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
     if (err) {
-        console.log(err.message);
+        console.log('mysql connection error: ' + err.message + '\n exiting...');
         process.exit()
     }
     else {
-        connection.query("CREATE TABLE IF NOT EXISTS books (id int NOT NULL AUTO_INCREMENT, title varchar(250) DEFAULT NULL, author varchar(250) DEFAULT NULL, description varchar(400) DEFAULT NULL, PRIMARY KEY(id)) ENGINE = InnoDB AUTO_INCREMENT = 0")
+        let query = "CREATE TABLE IF NOT EXISTS books (id int NOT NULL AUTO_INCREMENT, title varchar(250) DEFAULT NULL, author varchar(250) DEFAULT NULL, description varchar(400) DEFAULT NULL, PRIMARY KEY(id)) ENGINE = InnoDB AUTO_INCREMENT = 0";
+        connection.query(query, (err) => {
+            if (err) {
+                console.log('Error when initializing table: ' + err + '\n exiting...');
+                process.exit();
+            }
+        })
         console.log('mysql: connected to database: ' + connection.config.database)
     }
 })
@@ -29,8 +34,6 @@ class DbService {
     static getDbServiceInstance() {
         return instance ? instance : new DbService();
     }
-
-    //init command for making sure the db structure is ok
 
 
     async getAll() {
@@ -88,6 +91,24 @@ class DbService {
         }
     }
 
+    async updateOne(book) {
+        try {
+            id = parseInt(book.id);
+            const response = await new Promise((resolve, reject) => {
+                const query = "UPDATE books SET title = ?, author = ?, description = ?  WHERE id = ?";
+
+                connection.query(query, [book.title, book.author.book.description, id], (err, result) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(result.affectedRows);
+                })
+            });
+
+            return response === 1 ? true : false;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
 }
 
 module.exports = DbService;
