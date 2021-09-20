@@ -18,7 +18,7 @@ connection.connect((err) => {
         process.exit()
     }
     else {
-        let query = "CREATE TABLE IF NOT EXISTS books (id int NOT NULL AUTO_INCREMENT, title varchar(250) DEFAULT NULL, author varchar(250) DEFAULT NULL, description varchar(400) DEFAULT NULL, PRIMARY KEY(id)) ENGINE = InnoDB AUTO_INCREMENT = 0";
+        let query = "CREATE TABLE IF NOT EXISTS books (id int NOT NULL AUTO_INCREMENT, title varchar(250) NOT NULL, author varchar(250) NOT NULL, description varchar(400) NOT NULL, PRIMARY KEY(id)) ENGINE = InnoDB AUTO_INCREMENT = 0";
         connection.query(query, (err) => {
             if (err) {
                 console.log('Error when initializing table: ' + err + '\n exiting...');
@@ -45,7 +45,6 @@ class DbService {
                     resolve(results);
                 })
             });
-
             return response;
 
         } catch (error) {
@@ -56,6 +55,7 @@ class DbService {
 
 
     async insertNew(book) {
+
         try {
             const response = await new Promise((resolve, reject) => {
                 const query = "INSERT INTO books (title, author, description) VALUES (?,?,?);"

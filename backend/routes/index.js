@@ -3,6 +3,8 @@ const router = Router();
 
 const DbService = require('../db/dbService')
 
+//routes for api
+
 //add book
 router.post('/add', (request, response) => {
     const { book } = request.body;
@@ -16,7 +18,7 @@ router.post('/add', (request, response) => {
 })
 
 //edit book
-router.patch('/edit?:id', (request, response) => {
+router.post('/edit?:id', (request, response) => {
     const { id, name } = request.body;
     const db = DbService.getDbServiceInstance();
 
