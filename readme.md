@@ -36,6 +36,9 @@ Then run the installation script:
 
 After this, you need to configure your database enviroment for the backend. To do this, see included .env.example file in /backend directory. Edit this file and save with a filename of ".env". 
 
+
+Non-bash users should run *npm install* in both frontend and backend directories, as no automated installation script is provided for such enviroments.
+
 ## Starting the app
 
 To start both the front and backend, run **npm start** in the main directory.
