@@ -36,6 +36,24 @@ class DbService {
     }
 
 
+    async deleteById(id) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "DELETE FROM books WHERE id = ?;"
+                connection.query(query, [id], (err, result) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(result.changedRows);
+                })
+            });
+
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
+
     async getAll() {
         try {
             const response = await new Promise((resolve, reject) => {
@@ -61,7 +79,7 @@ class DbService {
                 const query = "INSERT INTO books (title, author, description) VALUES (?,?,?);"
                 connection.query(query, [book.author, book.title, book.description], (err, result) => {
                     if (err) reject(new Error(err.message));
-                    resolve(result.insertedId);
+                    resolve(result);
                 })
             });
 
@@ -73,13 +91,13 @@ class DbService {
         }
     }
 
-    async deleteById(id) {
+    async getOneById(id) {
         try {
             const response = await new Promise((resolve, reject) => {
-                const query = "DELETE FROM books WHERE id = ?;"
+                const query = "SELECT FROM books WHERE id = ?;"
                 connection.query(query, [id], (err, result) => {
                     if (err) reject(new Error(err.message));
-                    resolve(result.insertedId);
+                    resolve(result);
                 })
             });
 
@@ -99,7 +117,7 @@ class DbService {
 
                 connection.query(query, [book.title, book.author.book.description, id], (err, result) => {
                     if (err) reject(new Error(err.message));
-                    resolve(result.affectedRows);
+                    resolve(result);
                 })
             });
 

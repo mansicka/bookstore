@@ -7,7 +7,8 @@ const DbService = require('../db/dbService')
 
 //add book
 router.post('/add', (request, response) => {
-    const { book } = request.body;
+    const book = request.body;
+
     const db = DbService.getDbServiceInstance();
 
     const result = db.insertNew(book);
@@ -18,19 +19,17 @@ router.post('/add', (request, response) => {
 })
 
 //edit book
-router.post('/edit?:id', (request, response) => {
-    const { id, name } = request.body;
+router.post('/edit', (request, response) => {
+    const book = request.body;
     const db = DbService.getDbServiceInstance();
-
     const result = db.updateBook(book);
-
     result
         .then(data => response.json({ success: data }))
         .catch(err => console.log(err));
 })
 
 //delete book
-router.get('/delete?:id', (request, response) => {
+router.get('/delete/:id', (request, response) => {
     const { id } = request.params;
     const db = DbService.getDbServiceInstance();
 
@@ -50,5 +49,16 @@ router.get('/books/', (request, response) => {
         .then(data => response.json(data))
         .catch(err => response.json(err));
 })
+
+//get single book
+router.get('/book/:id', (request, response) => {
+    const db = DbService.getDbServiceInstance();
+
+    const results = db.getOneById();
+    results
+        .then(data => response.json(data))
+        .catch(err => response.json(err));
+})
+
 
 module.exports = router;
