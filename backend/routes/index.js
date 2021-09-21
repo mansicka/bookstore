@@ -20,17 +20,19 @@ router.post('/add', (request, response) => {
 
 //edit book
 router.post('/edit', (request, response) => {
+    console.log(request.body)
     const book = request.body;
     const db = DbService.getDbServiceInstance();
-    const result = db.updateBook(book);
+    const result = db.updateOne(book);
     result
         .then(data => response.json({ success: data }))
         .catch(err => console.log(err));
 })
 
 //delete book
-router.get('/delete/:id', (request, response) => {
-    const { id } = request.params;
+router.post('/delete', (request, response) => {
+    const id = parseInt(request.body.id)
+    console.log(request.body)
     const db = DbService.getDbServiceInstance();
 
     const result = db.deleteById(id);
@@ -51,10 +53,11 @@ router.get('/books/', (request, response) => {
 })
 
 //get single book
-router.get('/book/:id', (request, response) => {
+router.get('/book/', (request, response) => {
+    const id = parseInt(request.body);
     const db = DbService.getDbServiceInstance();
 
-    const results = db.getOneById();
+    const results = db.getOneById(id);
     results
         .then(data => response.json(data))
         .catch(err => response.json(err));

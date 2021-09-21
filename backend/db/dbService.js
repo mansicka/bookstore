@@ -42,7 +42,7 @@ class DbService {
                 const query = "DELETE FROM books WHERE id = ?;"
                 connection.query(query, [id], (err, result) => {
                     if (err) reject(new Error(err.message));
-                    resolve(result.changedRows);
+                    resolve(result);
                 })
             });
 
@@ -111,20 +111,20 @@ class DbService {
 
     async updateOne(book) {
         try {
-            id = parseInt(book.id);
+            const id = parseInt(book.id);
             const response = await new Promise((resolve, reject) => {
                 const query = "UPDATE books SET title = ?, author = ?, description = ?  WHERE id = ?";
 
-                connection.query(query, [book.title, book.author.book.description, id], (err, result) => {
+                connection.query(query, [book.title, book.author, book.description, id], (err, result) => {
                     if (err) reject(new Error(err.message));
                     resolve(result);
                 })
             });
 
-            return response === 1 ? true : false;
+            return response;
         } catch (error) {
             console.log(error);
-            return false;
+            return error;
         }
     }
 }
