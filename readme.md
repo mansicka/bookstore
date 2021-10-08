@@ -4,26 +4,6 @@ This is a simple excercise project written to gain knowledge on building a simpl
 ## Requirements
  - Node.js and a web browser
  
-## Dependencies
-
-Backend:
-
-- cors@2.8.5 for CORS
-- dotenv@10.0.0 for enviromental variables
-- express@4.17.1 for web server functionality
-- mysql2@2.3.0 for MySQL database connection
-
-
-Frontend:
-
-- @emotion/react@11.4.1 - for MaterialUI library
-- @emotion/styled@11.3.0 - for MaterialUI library
-- @mui/material@5.0.0 - An UI library for React
-- react-dom@17.0.2 - an UI framework
-- react-scripts@4.0.3 - for React functionality
-- react@17.0.2- for React functionality
-
-
 ## Installation
 
 For automated installation:
