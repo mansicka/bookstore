@@ -43,4 +43,4 @@ Non-bash users should run *npm install* in both frontend and backend directories
 
 ## Starting the app
 
-To start both the front and backend, run **npm start** in the main directory.
+To start both the front and backend, run **npm start** in the project root directory.
