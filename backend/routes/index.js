@@ -6,7 +6,7 @@ const DbService = require('../db/dbService')
 //routes for api
 
 //add book
-router.post('/add', (request, response) => {
+router.put('/books', (request, response) => {
     const book = request.body;
 
     const db = DbService.getDbServiceInstance();
@@ -19,8 +19,8 @@ router.post('/add', (request, response) => {
 })
 
 //edit book
-router.post('/edit', (request, response) => {
-    console.log(request.body)
+router.patch('/books', (request, response) => {
+
     const book = request.body;
     const db = DbService.getDbServiceInstance();
     const result = db.updateOne(book);
@@ -30,7 +30,7 @@ router.post('/edit', (request, response) => {
 })
 
 //delete book
-router.post('/delete', (request, response) => {
+router.delete('/books', (request, response) => {
     const id = parseInt(request.body.id)
     console.log(request.body)
     const db = DbService.getDbServiceInstance();
@@ -53,7 +53,7 @@ router.get('/books/', (request, response) => {
 })
 
 //get single book
-router.get('/book/', (request, response) => {
+router.get('/books/:id', (request, response) => {
     const id = parseInt(request.body);
     const db = DbService.getDbServiceInstance();
 

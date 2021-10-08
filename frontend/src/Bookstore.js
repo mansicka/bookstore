@@ -9,15 +9,17 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
+import Title from './components/Title'
+
 function Bookstore() {
-    const url = 'http://localhost:5000';
+    const url = 'http://localhost:5000/books';
     const [books, setBooks] = useState([]); // books fetched from api
     const [message, setMessage] = useState(''); // error placeholder
     const [book, setBook] = useState({ id: '', author: '', title: '', description: '' }); //single book properties
 
     //display error message for 2 sec, then clear error message
-    const showMessage = (error) => {
-        setMessage(error)
+    const showMessage = (msg) => {
+        setMessage(msg)
         setTimeout(() => {
             setMessage('')
         }, 2000);
@@ -42,8 +44,7 @@ function Bookstore() {
     }
 
     const getBooks = async () => {
-        setMessage('');
-        let response = await fetch(url + '/books', { method: 'GET' });
+        let response = await fetch(url, { method: 'GET' });
         if (!response.ok) {
             message('Error while getting books: ' + response.statusText)
         }
@@ -53,8 +54,8 @@ function Bookstore() {
 
     //delete book
     const deleteBook = async (id) => {
-        let response = await fetch(url + '/delete', {
-            method: 'POST',
+        let response = await fetch(url, {
+            method: 'DELETE',
             mode: 'cors',
             headers: {
                 'Accept': 'application/json',
@@ -71,8 +72,8 @@ function Bookstore() {
 
     //Edit existing entry function
     const editBook = async (book) => {
-        let response = await fetch(url + '/edit', {
-            method: 'POST',
+        let response = await fetch(url, {
+            method: 'PATCH',
             mode: 'cors',
             headers: {
                 'Accept': 'application/json',
@@ -88,20 +89,26 @@ function Bookstore() {
 
     //Save new book function
     const saveNewBook = async (book) => {
-        let response = await fetch(url + '/add', {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(book)
-        });
-        if (!response.ok) {
-            showMessage('Error while saving book: ' + response.statusText)
-        } else { showMessage('Book saved OK!') }
-        getBooks();
+        if (!book.author || !book.title || !book.description) {
+            showMessage('Please fill out all fields!')
+        }
+        else {
+            let response = await fetch(url, {
+                method: 'PUT',
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(book)
+            });
+            if (!response.ok) {
+                showMessage('Error while saving book: ' + response.statusText)
+            } else { showMessage('Book saved OK!') }
+            getBooks();
+        }
     }
+
 
 
 
@@ -114,12 +121,12 @@ function Bookstore() {
         <div className="Bookstore">
             <Grid container spacing={4} justifyContent='center'>
                 <Grid item xs={12} style={{ textAlign: "center" }}>
-                    <Typography variant='h2'>bookstore</Typography>
+                    <Title />
                 </Grid>
 
 
                 <Grid item xs={3} padding={20}>
-                    <Table size='medium'>
+                    <Table size='medium' >
                         <TableHead>
                             <TableRow>
                                 <TableCell><Typography><b>ID</b></Typography></TableCell>
@@ -132,7 +139,6 @@ function Bookstore() {
                         </TableHead>
                         <TableBody>
                             {books.map(b => (
-
                                 <TableRow key={b.id}>
                                     <TableCell align="right">{b.id}</TableCell>
                                     <TableCell align="right">{b.author}</TableCell>
@@ -150,10 +156,10 @@ function Bookstore() {
                                 </TableRow>
                             ))}
                         </TableBody>
-                    </Table>
+                    </Table >
                 </Grid>
 
-                <Grid item xs={4} padding={20}>{message}</Grid>
+                <Grid item xs={4}> </Grid>
                 <Grid item xs={4} padding={20}>
                     <form>
                         <TextField
@@ -195,7 +201,7 @@ function Bookstore() {
                             style={{ width: 500 }}
                         /><br /><br />
                         {book.id &&
-                            < Button variant="contained" onClick={(e) => handleSubmit(e)}>
+                            <Button variant="contained" onClick={(e) => handleSubmit(e)}>
                                 Save book
                             </Button>}
                         {!book.id &&
@@ -208,6 +214,7 @@ function Bookstore() {
                 <Grid item xs={3} padding={20}>
                 </Grid>
             </Grid>
+
         </div >
     );
 }
